@@ -1,8 +1,10 @@
 const ChatModel = require("../Models/chatSchema");
 
+//Create new chat
+
 const createChat = async (req, res) => {
-  console.log(req.user,'reeeeeeeeeeeeeeeeeeeac');
-  console.log(req.body,'new chat bodyyyyy');
+  console.log(req.user, "reeeeeeeeeeeeeeeeeeeac");
+  console.log(req.body, "new chat bodyyyyy");
   const newChat = new ChatModel({
     members: [req.user._id, req.body.id],
   });
@@ -21,18 +23,22 @@ const createChat = async (req, res) => {
   }
 };
 
+//User chats
+
 const userChats = async (req, res) => {
   try {
     const chat = await ChatModel.find({
       members: { $in: [req.params.userId] },
-    }).sort({ updatedAt: -1 })
+    }).sort({ updatedAt: -1 });
     // .populate('recent','senderId text image');
-    console.log(chat,'findeddd chattttt');
+    console.log(chat, "findeddd chattttt");
     res.status(200).json(chat);
   } catch (error) {
     res.status(500).json(error);
   }
 };
+
+//Find user chats
 
 const findChat = async (req, res) => {
   try {

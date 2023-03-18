@@ -90,57 +90,69 @@ const loginController = async (req, res) => {
 
 const getUserDetails = async (req, res) => {
   try {
-    const user = await UserSchema.findById(req.params.id)
+    const user = await UserSchema.findById(req.params.id);
     const { password, createdAt, updatedAt, ...userData } = user._doc;
-    res.status(200).json(userData)
+    res.status(200).json(userData);
   } catch (error) {
     console.log(error);
-    res.status(500).json(error.message)
+    res.status(500).json(error.message);
   }
 };
 
 /* --------------------------- //update profilePic -------------------------- */
 
-const postUpdateProfilePic =async (req,res)=>{
-
-  const {_id} = req.user
-  let image = req?.file?.filename
+const postUpdateProfilePic = async (req, res) => {
+  const { _id } = req.user;
+  let image = req?.file?.filename;
   try {
-    const result = await UserSchema.findByIdAndUpdate(_id, { $set: { profile: image } })
-    console.log(result,'pic update');
+    const result = await UserSchema.findByIdAndUpdate(_id, {
+      $set: { profile: image },
+    });
+    console.log(result, "pic update");
     const { password, createdAt, updatedAt, ...userData } = result._doc;
 
-    res.status(200).json({message:'profile picture updated', user:{...userData,profile:image}})
+    res
+      .status(200)
+      .json({
+        message: "profile picture updated",
+        user: { ...userData, profile: image },
+      });
   } catch (error) {
-    res.status(500).json(error.message)
+    res.status(500).json(error.message);
   }
-}
+};
 
 /* ----------------------------- //Search Users ----------------------------- */
 
-const searchUser =async (req,res)=>{
-  const {id} = req.params
+const searchUser = async (req, res) => {
+  const { id } = req.params;
 
   try {
-    const user = await UserSchema.find( { phone: { $regex: "^" + id  }, _id:{$ne:req.user._id} },{name:1,phone:1,profile:1})
-    res.status(200).json({users:user})
+    const user = await UserSchema.find(
+      { phone: { $regex: "^" + id }, _id: { $ne: req.user._id } },
+      { name: 1, phone: 1, profile: 1 }
+    );
+    res.status(200).json({ users: user });
   } catch (error) {
-    res.status(500).json(error?.message)
+    res.status(500).json(error?.message);
   }
-}
+};
 
 /* ------------------------- //Update online status ------------------------- */
 
-const updateOnlineStatus =async(req,res)=>{
-  console.log(req.body,'online status update route called');
-  const time = Date.now()
+const updateOnlineStatus = async (req, res) => {
+  console.log(req.body, "online status update route called");
+  const time = Date.now();
   try {
-    const result = await UserSchema.updateOne({_id:req.body.id},{$set:{online:time}})
-    res.status(200).json({message:'updated'})
+    const result = await UserSchema.updateOne(
+      { _id: req.body.id },
+      { $set: { online: time } }
+    );
+    res.status(200).json({ message: "updated" });
   } catch (error) {
-    res.status(500).json(error.message)
+    res.status(500).json(error.message);
   }
-}
+};
 
 module.exports = {
   createController,
@@ -149,5 +161,5 @@ module.exports = {
   getUserDetails,
   updateOnlineStatus,
   postUpdateProfilePic,
-  searchUser
+  searchUser,
 };

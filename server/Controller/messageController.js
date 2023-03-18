@@ -1,6 +1,9 @@
 const MessageSchema = require('../Models/messageSchema')
 const ChatModel = require("../Models/chatSchema");
 
+
+//Add new message
+
 const addMessage = async(req,res)=>{
     console.log(req.body,'bodyyyyyyy');
     const {chatId,senderId,text} = req.body
@@ -18,6 +21,7 @@ const addMessage = async(req,res)=>{
     }
 }
 
+//Get User Messages
 
 const getMessages = async (req,res)=>{
     const {chatId} = req.params;
@@ -29,6 +33,8 @@ const getMessages = async (req,res)=>{
         res.status(500).json(error)
     }
 }
+
+//Send Image message
 
 const addImageMessage = async(req,res,next)=>{
     console.log(req?.body,'image body');
@@ -73,6 +79,8 @@ const getUnread = async(req,res) =>{
         res.status(500).json(error.message)
     }
 }
+
+//Change message read/unread Status
 
 const postMessageStatus =async(req,res)=>{
     console.log(req.params.id,'chat iddddd');
