@@ -13,7 +13,7 @@ export default function Message({ message, currentUser }) {
   return (
     <div ref={scroll}
     className={`flex justify-center items-center rounded-md w-fit my-1 ${
-      message.senderId === currentUser ? "bg-[#005c4b] ml-auto" : "bg-[#202d33] mr-auto"
+      message.senderId === currentUser ? "dark:bg-[#005c4b] bg-[#D9FDD3]  ml-auto" : "dark:bg-[#202d33] bg-[#FFFFFF] mr-auto"
     }`}
   >
     {/* Image message */}
@@ -43,7 +43,7 @@ export default function Message({ message, currentUser }) {
         className="flex justify-between items-end max-w-[410px] p-2"
         style={{ wordBreak: "break-word" }}
       >
-          <p className="text-white text-sm mr-2">{message?.text}</p>
+          <p className="dark:text-white text-sm mr-2">{message?.text}</p>
         <p className="text-[#8796a1] text-[12px] min-w-[50px] mb-0">{format(message?.createdAt)}</p>
         { message?.read ? <BsCheck2All className='text-gray-400 ml-2'/>
         :<BsCheck2 className='text-gray-400 ml-2'/>}

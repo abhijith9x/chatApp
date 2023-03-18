@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
+import {useNavigate} from 'react-router-dom'
 import { format } from "timeago.js";
-import { MdInsertPhoto } from "react-icons/md";
 import { fetchUnreadApi } from "../../apis/chatApis";
 import { getUser } from "../../apis/userApis";
 import { socket } from "../../context/SocketContext";
@@ -12,6 +12,7 @@ export default function Chat({
   search,
   active,
 }) {
+  const navigate = useNavigate()
   const [recieverData, setRecieverData] = useState(null);
   const [recieveMessage, setRecieveMessage] = useState(null);
   const [unread, setUnread] = useState(0);
@@ -60,6 +61,11 @@ export default function Chat({
       setUnread(data);
     } catch (error) {
       console.log(error);
+      if(error.response.status === 401 || 403){
+        alert('you are not authenticated')
+        localStorage.clear()
+        navigate('/login')
+      }
     }
   };
 
@@ -74,7 +80,7 @@ export default function Chat({
 
   return (
     <div
-      className={`flex justify-between items-center cursor-pointer w-100 h-[85px] px-3 hover:bg-[#202d33] `}
+      className={`flex justify-between items-center cursor-pointer w-100 h-[85px] px-3 dark:hover:bg-[#202d33] hover:bg-gray-100 `}
     >
       {/* Profile picture */}
       <div className="relative">
@@ -90,11 +96,11 @@ export default function Chat({
         )}
       </div>
       {/* Info container */}
-      <div className="flex justify-between border-t border-neutral-700 w-100 h-100 py-3">
+      <div className="flex justify-between border-t dark:border-neutral-700 border-neutral-300 w-100 h-100 py-3">
         {/* Contact name and message */}
-        <div className="flex flex-col justify-between text-white">
+        <div className="flex flex-col justify-between dark:text-white text-black">
           {/* Contact name */}
-          <h3 className="text-xl font-normal mb-1">{recieverData?.name}</h3>
+          <h3 className="text-xl font-normal mb-1 dark:text-gray-400">{recieverData?.name}</h3>
 
           {/* Message */}
           {typing.includes(recieverData?._id) ? (

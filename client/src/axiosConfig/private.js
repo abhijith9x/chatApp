@@ -13,26 +13,32 @@ const privateInstance = axios.create({
 
 privateInstance.interceptors.request.use(
   async (config) => {
-    const token = localStorage.getItem("accessToken");
-    let currentDate = new Date();
-    if (token) {
-      const decodedToken = jwt_decode(token);
-      console.log(decodedToken, "token dedcoded");
-      if(config.data instanceof FormData){
-        config.headers['Content-Type'] = 'multipart/form-data'
+    try {
+      const token = localStorage.getItem("accessToken");
+      let currentDate = new Date();
+      if (token) {
+        const decodedToken = jwt_decode(token);
+        console.log(decodedToken, "token dedcoded");
+        if(config.data instanceof FormData){
+          config.headers['Content-Type'] = 'multipart/form-data'
+        }
+        if (decodedToken.exp * 1000 < currentDate.getTime()) {
+          const refreshToken = localStorage.getItem("refreshToken") ;
+          console.log(refreshToken, "token expired");
+          const data = await getNewToken(refreshToken);
+          config.headers["authorization"] = `Bearer ${data.accessToken}`;
+          return config;
+        } else {
+          console.log(token, "hhhh");
+          config.headers["authorization"] = `Bearer ${token}`; 
+          return config;
+        }
       }
-      if (decodedToken.exp * 1000 < currentDate.getTime()) {
-        const refreshToken = localStorage.getItem("refreshToken") ;
-        console.log(refreshToken, "token expired");
-        const data = await getNewToken(refreshToken);
-        config.headers["authorization"] = `Bearer ${data.accessToken}`;
-        return config;
-      } else {
-        console.log(token, "hhhh");
-        config.headers["authorization"] = `Bearer ${token}`; 
-        return config;
-      }
+    } catch (error) {
+      console.log(error,'now error here');
+      return Promise.reject({msg:'inavlid token',status:403});
     }
+   
   },
   (error) => {
     return Promise.reject(error);

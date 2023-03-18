@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import InputEmoji from "react-input-emoji";
 import { MdSearch, MdSend } from "react-icons/md";
 import { HiDotsVertical } from "react-icons/hi";
@@ -177,8 +177,8 @@ export default function ChatDetails({
 
   return (
    <>
-    <div className="flex flex-col h-screen">
-      <div className="flex justify-between bg-[#202d33] h-[60px] p-3">
+    <div className="flex flex-col h-full">
+      <div className="flex justify-between dark:bg-[#202d33] bg-[#F0F2F5] h-[60px] p-3">
         <div className="flex items-center">
           <img
             src={PF + recieverData?.profile}
@@ -187,7 +187,7 @@ export default function ChatDetails({
           />
 
           <div className="flex flex-col mt-3">
-            <h1 className="text-white text-xl font-normal mb-0">
+            <h1 className="  dark:text-[#ffff] text-xl font-normal mb-0">
               {recieverData?.name}
             </h1>
 
@@ -208,7 +208,7 @@ export default function ChatDetails({
       </div>
 
       <div
-        className="bg-[#0a131a] bg-[url('assets/images/bg.webp')] bg-contain overflow-y-scroll h-100"
+        className="dark:bg-[#0a131a] dark:bg-[url('assets/images/bg.webp')] bg-[url('assets/images/whatsApp-bg.jpeg')] bg-contain overflow-y-scroll h-100"
         style={{ padding: "12px 7%" }}
       >
         {messages.map((message, i) => (
@@ -217,11 +217,11 @@ export default function ChatDetails({
       </div>
 
       {/* Bottom section */}
-      <div className="flex items-center bg-[#202d33] w-100 h-[70px] p-2">
+      <div className="flex items-center dark:bg-[#202d33] bg-[#F0F2F5] w-100 h-[70px] p-2">
         <span className="mr-2">
           <label
             htmlFor="image-input"
-            className="text-[#8796a1] text-xl p-2  rounded-full hover:bg-[#3c454c] cursor-pointer"
+            className="text-[#8796a1] text-xl p-2  rounded-full dark:hover:bg-[#3c454c] cursor-pointer"
           >
             <AiOutlinePaperClip className="" />
           </label>

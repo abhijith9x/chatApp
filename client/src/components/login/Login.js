@@ -42,7 +42,7 @@ export default function Login() {
       console.log(data, "data login");
       if(data.accessToken){
         const decoded = jwt_decode(data?.accessToken)
-        setUser(decoded.id)
+        setUser(decoded?.id)
         localStorage.setItem('accessToken',data?.accessToken)
         localStorage.setItem('refreshToken',data?.refreshToken)
         localStorage.setItem('user',JSON.stringify(decoded.id))
@@ -52,7 +52,7 @@ export default function Login() {
       if (error?.response?.status === 401 || 404) {
         setError(error?.response?.data?.message);
       }
-      console.log(error);
+      console.log(error,'iam');
     }
   };
   return (
@@ -63,7 +63,7 @@ export default function Login() {
             <img src={loginBg} className="w-full" alt="loginBg" />
           </div>
           <div className="mb-12 md:mb-0 md:w-8/12 lg:w-5/12 xl:w-5/12 min-h-full">
-            <h2 className="mb-10 dark:text-white">Login</h2>
+            <h2 className="mb-10 dark:text-white text-teal-500">Login</h2>
             <form onSubmit={handleSubmit(onSubmit)}>
               <div className="relative mb-6" data-te-input-wrapper-init>
                 <label

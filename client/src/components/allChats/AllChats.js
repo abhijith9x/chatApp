@@ -11,6 +11,7 @@ import { UserContext } from "../../context/UserDetailsProvider";
 import { socket } from "../../context/SocketContext";
 import { changeMessageStatus, getUserChats, startNewChat } from "../../apis/chatApis";
 import { findSearch } from "../../apis/userApis";
+import LogoutModal from "../modals/LogoutModal";
 
 export default function AllChats({ setCurrentChat, setProfile,onlineUsers }) {
   const [filter, setFilter] = useState(false);
@@ -18,6 +19,7 @@ export default function AllChats({ setCurrentChat, setProfile,onlineUsers }) {
   const [active,setActive] =useState('')
   const [typing, setTyping] = useState([]);
   const [searchUser, setSearchUser] = useState([]);
+  const [modal, setModal] = useState(false)
   const { user } = useContext(UserContext);
   const PF = process.env.REACT_APP_IMAGE_URL;
   const navigate = useNavigate();
@@ -49,7 +51,12 @@ export default function AllChats({ setCurrentChat, setProfile,onlineUsers }) {
       console.log(data);
       setChats(data);
     } catch (error) {
-      console.log(error);
+      console.log(error,'error');
+      if( error?.status === 403 || error?.response?.status === 401 ||403  ){
+        alert(`you are not authenticated \n logging out!`)
+        localStorage.clear()
+        navigate('/login')
+      }
     }
   };
 
@@ -95,11 +102,20 @@ export default function AllChats({ setCurrentChat, setProfile,onlineUsers }) {
   }
 
   //handle chat click
-  const handleChatClick=(chat)=>{
-    socket.emit('chat-open',{chat:chat,user:user._id})
-    setCurrentChat(chat);
-    changeMessageStatus(chat._id);
-    setActive(chat._id)
+  const handleChatClick=async(chat)=>{
+    try {
+      socket.emit('chat-open',{chat:chat,user:user._id})
+      setCurrentChat(chat);
+      await changeMessageStatus(chat._id);
+      setActive(chat._id)
+    } catch (error) {
+      console.log(error);
+      if(error.response.status === 401){
+        alert('you are not authenticated')
+        localStorage.clear()
+        navigate('/login')
+      }
+    }
   }
 
   //LOGUT
@@ -111,8 +127,8 @@ export default function AllChats({ setCurrentChat, setProfile,onlineUsers }) {
   };
 
   return (
-    <div className="flex flex-col border-r border-neutral-700 w-100 h-screen">
-      <div className="flex justify-between items-center bg-[#202d33] h-[60px] p-3">
+    <div className="flex flex-col  border-neutral-700 w-100 h-screen">
+      <div className="flex justify-between items-center dark:bg-[#202d33] bg-[#F0F2F5] h-[60px] p-3">
         {/* Profile picture */}
         <img
           src={PF + user?.profile}
@@ -125,7 +141,7 @@ export default function AllChats({ setCurrentChat, setProfile,onlineUsers }) {
           <Buttons icon={<MdPeopleAlt />} />
           <Buttons icon={<TbCircleDashed />} />
           <Buttons icon={<BsFillChatLeftTextFill />} />
-          <Buttons icon={<IoMdLogOut onClick={handleLogout} />} />
+          <Buttons icon={<IoMdLogOut onClick={()=>setModal(true)} />} />
         </div>
       </div>
 
@@ -136,7 +152,7 @@ export default function AllChats({ setCurrentChat, setProfile,onlineUsers }) {
           name="search"
           onChange={handleChange}
           placeholder="Search or start a new chat"
-          className="rounded-lg bg-[#202d33] text-[#8796a1] text-sm font-light outline-none px-4 py-2 w-[400px] h-[35px] placeholder:text-[#8796a1] placeholder:text-sm placeholder:font-light"
+          className="rounded-lg dark:bg-[#202d33] bg-[#F0F2F5] text-[#8796a1] text-sm font-light outline-none px-4 py-2 w-[400px] h-[35px] placeholder:text-[#8796a1] placeholder:text-sm placeholder:font-light"
         />
 
         <button
@@ -194,11 +210,11 @@ export default function AllChats({ setCurrentChat, setProfile,onlineUsers }) {
             );
           }) :
           <div className="flex flex-col items-center justify-center mb-10 h-full"> 
-          <p className="text-gray-300 text-lg">You have no chat's</p>
-          <p className="text-gray-300">Start New Chat</p>
+          <p className="dark:text-gray-300 text-black text-lg">You have no chat's</p>
+          <p className="dark:text-gray-300 text-black">Start New Chat</p>
           </div>}
         </div>
-       
+      { modal ? <LogoutModal  setModal ={setModal} handleLogout={handleLogout}/> : ''}
     </div>
   );
 }

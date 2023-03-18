@@ -9,12 +9,15 @@ const verifyApi = (req, res, next) => {
     jwt.verify(token, process.env.JWTSECRET, (err, user) => {
       console.log(user, "jwt user");
       if (err) {
-        return res.status(403).json({ message: "Your Api key is not valid" });
+        console.log('403');
+         res.status(403).json({ message: "Your Api key is not valid" });
+      }else{
+        req.user = user.id;
+        next();
       }
-      req.user = user.id;
-      next();
     });
   } else {
+    console.log('401');
     res.status(401).json({ message: "you are not authenticated!" });
   }
 };
