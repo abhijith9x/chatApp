@@ -1,7 +1,7 @@
-import React from "react";
-import ProgressBar from "react-bootstrap/ProgressBar";
-import { BsWhatsapp } from "react-icons/bs";
-import { FaLock } from "react-icons/fa";
+import React from "react"
+import ProgressBar from "react-bootstrap/ProgressBar"
+import { BsWhatsapp } from "react-icons/bs"
+import { FaLock } from "react-icons/fa"
 
 export default function LoadingUi({ progress }) {
   return (
@@ -12,7 +12,7 @@ export default function LoadingUi({ progress }) {
 
       {/* Loading bar and text */}
       <div className="flex flex-col justify-evenly items-center h-[150px]">
-        <ProgressBar 
+        <ProgressBar
           variant="success"
           now={progress}
           className="bg-[#243138] rounded-lg w-[320px] h-[3px]"
@@ -26,10 +26,10 @@ export default function LoadingUi({ progress }) {
               <FaLock />
             </span>
 
-            <p>End-to-end encrypted</p>
+            <p className="m-0 p-0">End-to-end encrypted</p>
           </div>
         </div>
       </div>
     </div>
-  );
+  )
 }

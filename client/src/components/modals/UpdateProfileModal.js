@@ -1,14 +1,13 @@
-import React from "react";
+import React from "react"
 
 export default function UpdateProfileModal({
   setShowModal,
   showImage,
   handleNewProfilePic,
-  setProfilePic
+  setProfilePic,
 }) {
-
-  const handleClose =()=>{
-    setProfilePic('')
+  const handleClose = () => {
+    setProfilePic("")
     setShowModal(false)
   }
   return (
@@ -17,7 +16,9 @@ export default function UpdateProfileModal({
         <div className="relative w-auto my-6 mx-auto max-w-lg">
           <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full dark:bg-[#111a21]  outline-none focus:outline-none">
             <div className="flex items-start justify-between p-3 border-b border-solid border-slate-200 rounded-t">
-              <h3 className="text-xl font-semibold dark:text-gray-300 mx-10">Update Profile Picture</h3>
+              <h3 className="text-xl font-semibold dark:text-gray-300 mx-10">
+                Update Profile Picture
+              </h3>
               <button
                 className="p-1 ml-auto bg-transparent border-0 text-black opacity-5 float-right text-3xl leading-none font-semibold outline-none focus:outline-none"
                 onClick={handleClose}
@@ -28,7 +29,11 @@ export default function UpdateProfileModal({
               </button>
             </div>
             <div className="relative px-6 flex gap-2 items-center justify-center p-6">
-              <img className="rounded-full w-52 h-52" src={showImage} alt="new image" />
+              <img
+                className="rounded-full w-52 h-52"
+                src={showImage}
+                alt="new profile Pic"
+              />
             </div>
             <div className="flex items-center justify-end px-6 py-2 border-t border-solid  rounded-b">
               <button
@@ -43,7 +48,7 @@ export default function UpdateProfileModal({
                 type="button"
                 onClick={handleNewProfilePic}
               >
-                Update 
+                Update
               </button>
             </div>
           </div>
@@ -51,5 +56,5 @@ export default function UpdateProfileModal({
       </div>
       <div className="opacity-25 fixed inset-0 z-40 dark:bg-black"></div>
     </>
-  );
+  )
 }
